@@ -32,7 +32,7 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({ data }) => (
           dataKey="value" // Property to use for segment size
         >
           {/* Map data to colored segments using the COLORS array */}
-          {data.map((entry, index) => (
+          {data.map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
