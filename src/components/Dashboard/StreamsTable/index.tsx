@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { Search, Filter } from 'lucide-react';
-import { Stream, FilterConfig, SortConfig, ArtistOption } from '../../../types/index';
+import { Stream, FilterConfig, SortConfig, ArtistOption, SongOption } from '../../../types/index';
 import { ITEMS_PER_PAGE } from '../../../constants';
 import { formatStreams } from '../../../utils/formatters';
 import { FilterPanel } from './FilterPanel';
@@ -22,14 +22,20 @@ export const StreamsTable: React.FC<StreamsTableProps> = ({ data }) => {
     direction: null 
   });
   const [filterConfig, setFilterConfig] = useState<FilterConfig>({ 
-    artists: [] 
+    artists: [],
+    songs: [] 
   });
   const [showFilters, setShowFilters] = useState(false);
 
-  // Memoize artist options to prevent recalculation on every render
+  // Memoize artist and song options to prevent recalculation on every render
   const artistOptions: ArtistOption[] = useMemo(() => 
     [...new Set(data.map(stream => stream.artist))]
       .map(artist => ({ value: artist, label: artist }))
+  , [data]);
+
+  const songOptions: SongOption[] = useMemo(() => 
+    [...new Set(data.map(stream => stream.song))]
+      .map(song => ({ value: song, label: song }))
   , [data]);
 
   // Handle sorting with useCallback to maintain referential equality
@@ -59,6 +65,13 @@ export const StreamsTable: React.FC<StreamsTableProps> = ({ data }) => {
     if (filterConfig.artists.length > 0) {
       filtered = filtered.filter(stream => 
         filterConfig.artists.includes(stream.artist)
+      );
+    }
+
+    // Apply song filters
+    if (filterConfig.songs.length > 0) {
+      filtered = filtered.filter(stream => 
+        filterConfig.songs.includes(stream.song)
       );
     }
 
@@ -127,6 +140,7 @@ export const StreamsTable: React.FC<StreamsTableProps> = ({ data }) => {
         {showFilters && (
           <FilterPanel
             artistOptions={artistOptions}
+            songOptions={songOptions}
             filterConfig={filterConfig}
             onFilterChange={setFilterConfig}
           />

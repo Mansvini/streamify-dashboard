@@ -1,14 +1,15 @@
 import React from 'react';
 import Select, { MultiValue, StylesConfig } from 'react-select';
-import { ArtistOption, FilterConfig } from '../../../types/index';
+import { ArtistOption, SongOption, FilterConfig } from '../../../types/index';
 
 interface FilterPanelProps {
   artistOptions: ArtistOption[];
+  songOptions: SongOption[];
   filterConfig: FilterConfig;
   onFilterChange: (newConfig: FilterConfig) => void;
 }
 
-const selectStyles: StylesConfig<ArtistOption, true> = {
+const selectStyles: StylesConfig<ArtistOption | SongOption, true> = {
   control: (base) => ({
     ...base,
     background: '#374151',
@@ -59,10 +60,12 @@ const selectStyles: StylesConfig<ArtistOption, true> = {
 
 export const FilterPanel: React.FC<FilterPanelProps> = ({
   artistOptions,
+  songOptions,
   filterConfig,
   onFilterChange
 }) => (
   <div className="flex space-x-4 bg-gray-800 p-4 rounded-lg">
+    {/* Artist Filter */}
     <div className="flex flex-col space-y-2">
       <label className="text-sm text-gray-400">Artists</label>
       <Select
@@ -84,6 +87,31 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         {filterConfig.artists.length === 0 
           ? "All Artists" 
           : `${filterConfig.artists.length} artist${filterConfig.artists.length === 1 ? '' : 's'} selected`}
+      </span>
+    </div>
+
+    {/* Song Filter */}
+    <div className="flex flex-col space-y-2">
+      <label className="text-sm text-gray-400">Songs</label>
+      <Select
+        isMulti
+        options={songOptions}
+        value={filterConfig.songs.map(song => ({ value: song, label: song }))}
+        onChange={(newValue: MultiValue<SongOption>) => {
+          onFilterChange({
+            ...filterConfig,
+            songs: newValue.map(option => option.value)
+          });
+        }}
+        className="w-64"
+        placeholder="Select songs..."
+        styles={selectStyles}
+        isClearable={true}
+      />
+      <span className="text-xs text-gray-400">
+        {filterConfig.songs.length === 0 
+          ? "All Songs" 
+          : `${filterConfig.songs.length} song${filterConfig.songs.length === 1 ? '' : 's'} selected`}
       </span>
     </div>
   </div>

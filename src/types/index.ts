@@ -57,6 +57,13 @@ export interface ArtistOption {
     /** Display name */
     label: string;
 }
+
+export interface SongOption {
+    /** Song identifier */
+    value: string;
+    /** Display name */
+    label: string;
+}
   
 /**
  * Configuration for table sorting
@@ -64,7 +71,6 @@ export interface ArtistOption {
 export type SortConfig = {
     /** Column key to sort by */
     key: keyof Stream | null;
-    /** Sort direction */
     direction: 'asc' | 'desc' | null;
 };
   
@@ -72,6 +78,6 @@ export type SortConfig = {
  * Configuration for table filtering
  */
 export type FilterConfig = {
-    /** Selected artist names */
     artists: string[];
+    songs: string[];
 };
