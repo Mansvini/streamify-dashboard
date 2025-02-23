@@ -3,7 +3,7 @@
 A React-based analytics dashboard for a music streaming service built with TypeScript, React, and TailwindCSS.
 
 ## 🚀 Live Demo
-[Insert your deployed application URL here]
+https://streamify-dashboard-beryl.vercel.app/
 
 ## 📖 Table of Contents
 - [Features](#features)
